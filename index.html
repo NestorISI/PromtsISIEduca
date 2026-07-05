@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <!--
   ═══════════════════════════════════════════════════════════════
-  VERSIÓN DEL ARCHIVO: 1.5
+  VERSIÓN DEL ARCHIVO: 1.6
   Última actualización: 2026-07-05
 
   Historial:
@@ -11,6 +11,7 @@
   - 1.3  Paso 3: punto medio con promedio en vez de percentil (luego revertido)
   - 1.4  Paso 3: punto medio con tipo "Porcentaje" (no Fórmula, no Percentil)
   - 1.5  Se agregó Parte 2 / Paso 4: marcar cumpleañeros del mes actual (usa columna Mes)
+  - 1.6  Se agregó Parte 2 / Paso 5: barras de datos sobre EdadAños
 
   Al editar este archivo (a mano o por chat), actualizar este número
   de versión y sumar una línea al historial.
@@ -409,6 +410,18 @@ No agregues columnas ni fórmulas adicionales para esto: usá directamente el fo
 Usá una regla con fórmula que compare la columna Mes de cada fila con el número de mes de la fecha de hoy, y aplicala a todas las columnas de la tabla para que se pinte la fila completa, no solo la celda de Mes.
 
 No agregues columnas nuevas para esto: usá directamente el formato condicional nativo de Excel con una regla basada en fórmula, aplicada sobre toda la tabla.`
+    },
+    {
+      part: 2,
+      partTitle: "Parte 2 · Formato condicional",
+      category: "Paso 5 · Formato condicional",
+      title: "Usar barras de datos sobre EdadAños",
+      desc: "Muestra una barra dentro de cada celda de EdadAños, más larga cuanto mayor es la edad, para ver de un vistazo quién es más grande o más chico sin leer los números.",
+      prompt: `A la tabla ya existente, aplicale un formato condicional de tipo barras de datos sobre la columna EdadAños: cuanto mayor sea la edad, más larga debe verse la barra dentro de la celda.
+
+Usá el formato de barras de datos nativo de Excel, con relleno sólido (no degradado), aplicado sobre toda la columna EdadAños de la tabla.
+
+No agregues columnas ni fórmulas adicionales para esto: usá directamente el formato condicional nativo de Excel de barras de datos.`
     }
   ];
 
