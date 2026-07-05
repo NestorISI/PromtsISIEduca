@@ -143,6 +143,41 @@
     gap: 16px;
   }
 
+  .part-header{
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
+    margin: 30px 0 4px;
+  }
+  .part-header:first-child{ margin-top: 4px; }
+
+  .part-header .part-num{
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: 13px;
+    color: #fff;
+    background: var(--teal);
+    padding: 3px 10px;
+    border-radius: 100px;
+    white-space: nowrap;
+  }
+
+  .part-header h2{
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 600;
+    font-size: 15px;
+    color: var(--ink-soft);
+    margin: 0;
+    text-transform: uppercase;
+    letter-spacing: .04em;
+  }
+
+  .part-header .rule{
+    flex: 1;
+    height: 1px;
+    background: var(--grid);
+  }
+
   .row{
     display: grid;
     grid-template-columns: 40px 1fr;
@@ -291,10 +326,16 @@
 <script>
   // ─────────────────────────────────────────────────────────────
   // Para agregar un prompt nuevo, sumá un objeto a este array.
-  // category se usa para generar los filtros automáticamente.
+  // - category: aparece como filtro (chip) y como etiqueta del paso.
+  // - part / partTitle: agrupan los pasos bajo un encabezado visual
+  //   ("Parte 1", "Parte 2"...). Repetí el mismo número de part y el
+  //   mismo partTitle en todos los pasos que pertenezcan a esa parte.
+  //   Cuando arranques una parte nueva, usá un número de part más alto.
   // ─────────────────────────────────────────────────────────────
   const prompts = [
     {
+      part: 1,
+      partTitle: "Parte 1 · Carga de datos y fórmulas",
       category: "Paso 1 · Datos base",
       title: "Generar la tabla con 100 registros ficticios",
       desc: "Crea los datos constantes: nombre, apellido, fecha de nacimiento y sueldo, ya formateados como tabla de Excel. Este es el punto de partida antes de agregar cualquier fórmula.",
@@ -303,6 +344,8 @@
 Asegurate de que la columna FechaDeNacimiento quede como fecha real de Excel, no como texto. Aplicá formato de tabla de Excel con encabezados y filtros. Al final, revisá que ninguna celda tenga errores (#VALOR!, #NUM!, etc.) y corregilos si aparecen.`
     },
     {
+      part: 1,
+      partTitle: "Parte 1 · Carga de datos y fórmulas",
       category: "Paso 2 · Fórmulas",
       title: "Agregar columnas calculadas a partir de FechaDeNacimiento",
       desc: "Toma la tabla ya cargada y suma columnas con fórmulas vivas (día, mes, semana del año, edad, días vividos, etc). Pensado para mostrarse después del prompt de datos base.",
@@ -316,6 +359,16 @@ Asegurate de que la columna FechaDeNacimiento quede como fecha real de Excel, no
 - DíasVividos (desde la fecha de nacimiento hasta hoy)
 
 Si FechaDeNacimiento no está en formato de fecha real, convertila antes de calcular las columnas. Al final, revisá que ninguna celda tenga errores (#VALOR!, #NUM!, etc.) y corregilos si aparecen.`
+    },
+    {
+      part: 2,
+      partTitle: "Parte 2 · Formato condicional",
+      category: "Paso 3 · Formato condicional",
+      title: "Resaltar los sueldos más altos y más bajos",
+      desc: "Aplica una escala de color sobre SueldoMensual: verde para los valores más altos y rojo para los más bajos, con transición gradual entre ambos.",
+      prompt: `A la tabla ya existente, aplicale un formato condicional de tipo escala de colores sobre la columna SueldoMensual: los valores más altos deben verse en verde y los valores más bajos en rojo, con una transición gradual de color entre ambos extremos.
+
+No agregues columnas ni fórmulas adicionales para esto: usá directamente el formato condicional nativo de Excel de escala de colores, aplicado sobre toda la columna SueldoMensual de la tabla.`
     }
   ];
 
@@ -352,12 +405,25 @@ Si FechaDeNacimiento no está en formato de fecha real, convertila antes de calc
     main.innerHTML = "";
     const list = prompts.filter(p => activeFilter === "Todos" || p.category === activeFilter);
 
-    list.forEach((p, idx) => {
+    let lastPart = null;
+    let rowInPart = 0;
+
+    list.forEach((p) => {
+      if (p.part !== lastPart){
+        lastPart = p.part;
+        rowInPart = 0;
+        const header = document.createElement('div');
+        header.className = 'part-header';
+        header.innerHTML = `<span class="part-num">Parte ${p.part}</span><h2>${p.partTitle.replace(/^Parte \d+ · /,'')}</h2><span class="rule"></span>`;
+        main.appendChild(header);
+      }
+      rowInPart++;
+
       const row = document.createElement('div');
       row.className = 'row';
 
       row.innerHTML = `
-        <div class="rownum">${idx + 1}</div>
+        <div class="rownum">${rowInPart}</div>
         <div class="row-body">
           <div class="row-top">
             <h3 class="row-title">${p.title}</h3>
