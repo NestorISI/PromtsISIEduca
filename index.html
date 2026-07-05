@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <!--
   ═══════════════════════════════════════════════════════════════
-  VERSIÓN DEL ARCHIVO: 1.4
+  VERSIÓN DEL ARCHIVO: 1.5
   Última actualización: 2026-07-05
 
   Historial:
@@ -10,6 +10,7 @@
   - 1.2  Se agregó Parte 2 / Paso 3: formato condicional (escala de colores)
   - 1.3  Paso 3: punto medio con promedio en vez de percentil (luego revertido)
   - 1.4  Paso 3: punto medio con tipo "Porcentaje" (no Fórmula, no Percentil)
+  - 1.5  Se agregó Parte 2 / Paso 4: marcar cumpleañeros del mes actual (usa columna Mes)
 
   Al editar este archivo (a mano o por chat), actualizar este número
   de versión y sumar una línea al historial.
@@ -396,6 +397,18 @@ Si FechaDeNacimiento no está en formato de fecha real, convertila antes de calc
 Para el punto medio de la escala de colores, configuralo con el tipo "Porcentaje" (por ejemplo 50%).
 
 No agregues columnas ni fórmulas adicionales para esto: usá directamente el formato condicional nativo de Excel de escala de colores, aplicado sobre toda la columna SueldoMensual de la tabla.`
+    },
+    {
+      part: 2,
+      partTitle: "Parte 2 · Formato condicional",
+      category: "Paso 4 · Formato condicional",
+      title: "Marcar los cumpleaños del mes actual",
+      desc: "Resalta con color las filas de las personas que cumplen años este mes, usando la columna Mes ya calculada en la tabla.",
+      prompt: `A la tabla ya existente, agregale un formato condicional que resalte con un color de fondo toda la fila de las personas cuyo Mes coincida con el mes actual (el mes de hoy).
+
+Usá una regla con fórmula que compare la columna Mes de cada fila con el número de mes de la fecha de hoy, y aplicala a todas las columnas de la tabla para que se pinte la fila completa, no solo la celda de Mes.
+
+No agregues columnas nuevas para esto: usá directamente el formato condicional nativo de Excel con una regla basada en fórmula, aplicada sobre toda la tabla.`
     }
   ];
 
