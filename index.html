@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Prompts para Copilot en Excel</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink: #1B2430;
+    --ink-soft: #4B5A63;
+    --paper: #F4F6F5;
+    --cell: #FFFFFF;
+    --row-alt: #EBEEEC;
+    --grid: #D6DBDA;
+    --teal: #1F6F63;
+    --teal-dark: #14504A;
+    --amber: #DB8A3A;
+    --amber-dark: #B96F26;
+    --radius: 6px;
+  }
+
+  *{ box-sizing: border-box; }
+
+  html,body{
+    margin:0; padding:0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'IBM Plex Sans', sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  body{
+    background-image:
+      linear-gradient(var(--grid) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+    background-size: 44px 44px;
+    background-position: -1px -1px;
+  }
+
+  .colbar{
+    display:flex;
+    max-width: 980px;
+    margin: 0 auto;
+    padding: 10px 24px 0;
+    gap: 44px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--ink-soft);
+    opacity: .55;
+    overflow: hidden;
+  }
+  .colbar span{ flex: 0 0 auto; }
+
+  header{
+    max-width: 980px;
+    margin: 0 auto;
+    padding: 18px 24px 40px;
+  }
+
+  .eyebrow{
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12.5px;
+    color: var(--teal-dark);
+    background: rgba(31,111,99,0.08);
+    border: 1px solid rgba(31,111,99,0.25);
+    display: inline-block;
+    padding: 3px 9px;
+    border-radius: 4px;
+    letter-spacing: .03em;
+    margin-bottom: 18px;
+  }
+
+  h1{
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: clamp(30px, 5vw, 44px);
+    line-height: 1.08;
+    margin: 0 0 12px;
+    letter-spacing: -0.01em;
+  }
+
+  h1 em{
+    font-style: normal;
+    color: var(--teal);
+  }
+
+  .lead{
+    max-width: 620px;
+    color: var(--ink-soft);
+    font-size: 16px;
+    line-height: 1.6;
+    margin: 0 0 26px;
+  }
+
+  .meta-strip{
+    display:flex;
+    gap: 22px;
+    flex-wrap: wrap;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12.5px;
+    color: var(--ink-soft);
+    border-top: 1px solid var(--grid);
+    padding-top: 14px;
+  }
+  .meta-strip b{ color: var(--ink); font-weight: 600;}
+
+  .filters{
+    max-width: 980px;
+    margin: 0 auto;
+    padding: 0 24px 8px;
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .chip{
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12.5px;
+    background: var(--cell);
+    border: 1px solid var(--grid);
+    color: var(--ink-soft);
+    padding: 6px 12px;
+    border-radius: 100px;
+    cursor: pointer;
+    transition: all .15s ease;
+  }
+  .chip:hover{ border-color: var(--teal); color: var(--teal-dark); }
+  .chip.active{
+    background: var(--teal);
+    border-color: var(--teal);
+    color: #fff;
+  }
+
+  main{
+    max-width: 980px;
+    margin: 0 auto;
+    padding: 20px 24px 80px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .row{
+    display: grid;
+    grid-template-columns: 40px 1fr;
+    background: var(--cell);
+    border: 1px solid var(--grid);
+    border-radius: var(--radius);
+    overflow: hidden;
+    transition: border-color .15s ease, box-shadow .15s ease;
+  }
+  .row:hover{
+    border-color: rgba(31,111,99,0.45);
+    box-shadow: 0 2px 14px rgba(20,80,74,0.06);
+  }
+
+  .rownum{
+    background: var(--row-alt);
+    border-right: 1px solid var(--grid);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 13px;
+    color: var(--ink-soft);
+    display:flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding-top: 18px;
+  }
+
+  .row-body{ padding: 18px 20px 20px; }
+
+  .row-top{
+    display:flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 6px;
+  }
+
+  .row-title{
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 600;
+    font-size: 17px;
+    margin: 0;
+  }
+
+  .tag{
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--teal-dark);
+    background: rgba(31,111,99,0.09);
+    border: 1px solid rgba(31,111,99,0.2);
+    padding: 2px 8px;
+    border-radius: 4px;
+    white-space: nowrap;
+  }
+
+  .row-desc{
+    color: var(--ink-soft);
+    font-size: 14px;
+    line-height: 1.5;
+    margin: 0 0 14px;
+    max-width: 640px;
+  }
+
+  .prompt-box{
+    position: relative;
+    background: #FBFBFA;
+    border: 1px solid var(--grid);
+    border-radius: 4px;
+    padding: 14px 16px;
+  }
+
+  .prompt-box pre{
+    margin: 0;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 13px;
+    line-height: 1.65;
+    color: var(--ink);
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+
+  .copy-btn{
+    margin-top: 12px;
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-weight: 600;
+    font-size: 13px;
+    color: #fff;
+    background: var(--teal);
+    border: none;
+    padding: 8px 14px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background .15s ease, transform .1s ease;
+  }
+  .copy-btn:hover{ background: var(--teal-dark); }
+  .copy-btn:active{ transform: scale(0.97); }
+  .copy-btn.copied{ background: var(--amber-dark); }
+
+  .copy-btn svg{ width: 14px; height: 14px; flex: 0 0 auto; }
+
+  footer{
+    max-width: 980px;
+    margin: 0 auto;
+    padding: 0 24px 60px;
+    color: var(--ink-soft);
+    font-size: 12.5px;
+    font-family: 'IBM Plex Mono', monospace;
+    border-top: 1px solid var(--grid);
+    padding-top: 18px;
+  }
+
+  @media (max-width: 560px){
+    .colbar{ display:none; }
+    .row{ grid-template-columns: 30px 1fr; }
+    .rownum{ font-size: 11px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="colbar">
+  <span>A</span><span>B</span><span>C</span><span>D</span><span>E</span><span>F</span><span>G</span><span>H</span><span>I</span><span>J</span><span>K</span><span>L</span>
+</div>
+
+<header>
+  <span class="eyebrow">Clase en vivo · Copilot en Excel</span>
+  <h1>Prompts listos para <em>copiar y pegar</em></h1>
+  <p class="lead">Compendio de instrucciones probadas para usar con Microsoft 365 Copilot integrado en Excel. Cada fila es un prompt completo: copialo con un clic y pegalo directo en el panel de Copilot.</p>
+  <div class="meta-strip">
+    <span><b id="countDisplay">0</b> prompts</span>
+    <span>Actualizado: <b id="dateDisplay"></b></span>
+  </div>
+</header>
+
+<div class="filters" id="filters"></div>
+
+<main id="main"></main>
+
+<footer>
+  Compendio de prompts · uso libre durante la clase en vivo
+</footer>
+
+<script>
+  // ─────────────────────────────────────────────────────────────
+  // Para agregar un prompt nuevo, sumá un objeto a este array.
+  // category se usa para generar los filtros automáticamente.
+  // ─────────────────────────────────────────────────────────────
+  const prompts = [
+    {
+      category: "Paso 1 · Datos base",
+      title: "Generar la tabla con 100 registros ficticios",
+      desc: "Crea los datos constantes: nombre, apellido, fecha de nacimiento y sueldo, ya formateados como tabla de Excel. Este es el punto de partida antes de agregar cualquier fórmula.",
+      prompt: `Creá una tabla en Excel con 100 registros ficticios con los campos: Nombre, Apellido, FechaDeNacimiento (formato dd/mm/aaaa, entre 1960 y 2005) y SueldoMensual (entre 300.000 y 3.000.000, formato moneda).
+
+Asegurate de que la columna FechaDeNacimiento quede como fecha real de Excel, no como texto. Aplicá formato de tabla de Excel con encabezados y filtros. Al final, revisá que ninguna celda tenga errores (#VALOR!, #NUM!, etc.) y corregilos si aparecen.`
+    },
+    {
+      category: "Paso 2 · Fórmulas",
+      title: "Agregar columnas calculadas a partir de FechaDeNacimiento",
+      desc: "Toma la tabla ya cargada y suma columnas con fórmulas vivas (día, mes, semana del año, edad, días vividos, etc). Pensado para mostrarse después del prompt de datos base.",
+      prompt: `A la tabla ya existente, que tiene la columna FechaDeNacimiento en formato de fecha real, agregale las siguientes columnas calculadas, todas con fórmulas vivas de Excel (no valores pegados), basadas en FechaDeNacimiento:
+- Día, Mes, Año
+- DíaSemanaNum (1=lunes)
+- NombreDía, NombreMes (en español, texto completo)
+- InicioDeMes, FinDeMes
+- SemanaAño: usar la función NUM.DE.SEMANA con tipo 2, de modo que la semana comience el día lunes y la semana 1 sea siempre la que contiene el 1 de enero (no usar el criterio ISO)
+- EdadAños (edad exacta a la fecha de hoy, considerando si ya pasó el cumpleaños)
+- DíasVividos (desde la fecha de nacimiento hasta hoy)
+
+Si FechaDeNacimiento no está en formato de fecha real, convertila antes de calcular las columnas. Al final, revisá que ninguna celda tenga errores (#VALOR!, #NUM!, etc.) y corregilos si aparecen.`
+    }
+  ];
+
+  const main = document.getElementById('main');
+  const filtersEl = document.getElementById('filters');
+  const countDisplay = document.getElementById('countDisplay');
+  const dateDisplay = document.getElementById('dateDisplay');
+
+  dateDisplay.textContent = new Date().toLocaleDateString('es-AR', { day: '2-digit', month: 'long', year: 'numeric' });
+  countDisplay.textContent = prompts.length;
+
+  const categories = ["Todos", ...new Set(prompts.map(p => p.category))];
+  let activeFilter = "Todos";
+
+  function copyIcon(){
+    return `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="12" height="12" rx="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>`;
+  }
+  function checkIcon(){
+    return `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>`;
+  }
+
+  function renderFilters(){
+    filtersEl.innerHTML = "";
+    categories.forEach(cat => {
+      const chip = document.createElement('button');
+      chip.className = 'chip' + (cat === activeFilter ? ' active' : '');
+      chip.textContent = cat;
+      chip.onclick = () => { activeFilter = cat; renderFilters(); renderRows(); };
+      filtersEl.appendChild(chip);
+    });
+  }
+
+  function renderRows(){
+    main.innerHTML = "";
+    const list = prompts.filter(p => activeFilter === "Todos" || p.category === activeFilter);
+
+    list.forEach((p, idx) => {
+      const row = document.createElement('div');
+      row.className = 'row';
+
+      row.innerHTML = `
+        <div class="rownum">${idx + 1}</div>
+        <div class="row-body">
+          <div class="row-top">
+            <h3 class="row-title">${p.title}</h3>
+            <span class="tag">${p.category}</span>
+          </div>
+          <p class="row-desc">${p.desc}</p>
+          <div class="prompt-box">
+            <pre>${p.prompt.replace(/</g,'&lt;')}</pre>
+          </div>
+          <button class="copy-btn">${copyIcon()}<span>Copiar prompt</span></button>
+        </div>
+      `;
+
+      const btn = row.querySelector('.copy-btn');
+      btn.addEventListener('click', () => {
+        navigator.clipboard.writeText(p.prompt).then(() => {
+          btn.classList.add('copied');
+          btn.querySelector('span').textContent = '¡Copiado!';
+          btn.innerHTML = checkIcon() + '<span>¡Copiado!</span>';
+          setTimeout(() => {
+            btn.classList.remove('copied');
+            btn.innerHTML = copyIcon() + '<span>Copiar prompt</span>';
+          }, 1800);
+        });
+      });
+
+      main.appendChild(row);
+    });
+  }
+
+  renderFilters();
+  renderRows();
+</script>
+
+</body>
+</html>
