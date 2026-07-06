@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <!--
   ═══════════════════════════════════════════════════════════════
-  VERSIÓN DEL ARCHIVO: 1.13
+  VERSIÓN DEL ARCHIVO: 1.14
   Última actualización: 2026-07-05
 
   Historial:
@@ -19,6 +19,8 @@
   - 1.11 Se agregó Parte 5 / Paso 11: tabla dinámica simple de suma de sueldos por Departamento
   - 1.12 Se agregó Parte 5 / Paso 12: tabla dinámica cruzada de personas por Departamento y rango de edad
   - 1.13 Se agregó Parte 5 / Paso 13: gráfico dinámico vinculado a la tabla cruzada del Paso 12
+  - 1.14 Se agregó menú de navegación por Parte (sticky) para saltar
+         directo a cada parte sin scrollear todo el documento
 
   Al editar este archivo (a mano o por chat), actualizar este número
   de versión y sumar una línea al historial.
@@ -131,6 +133,51 @@
     padding-top: 14px;
   }
   .meta-strip b{ color: var(--ink); font-weight: 600;}
+
+  .part-nav{
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    background: var(--paper);
+    border-bottom: 1px solid var(--grid);
+    box-shadow: 0 1px 0 rgba(0,0,0,0.02);
+  }
+
+  .part-nav-inner{
+    max-width: 980px;
+    margin: 0 auto;
+    padding: 12px 24px;
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+  .part-btn{
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 600;
+    font-size: 13px;
+    background: var(--cell);
+    border: 1px solid var(--grid);
+    color: var(--ink-soft);
+    padding: 8px 14px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all .15s ease;
+    white-space: nowrap;
+  }
+  .part-btn:hover{ border-color: var(--teal); color: var(--teal-dark); }
+  .part-btn.active{
+    background: var(--teal);
+    border-color: var(--teal);
+    color: #fff;
+  }
+  .part-btn .part-btn-num{
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    opacity: .75;
+    margin-right: 6px;
+  }
 
   .filters{
     max-width: 980px;
@@ -321,6 +368,8 @@
     .colbar{ display:none; }
     .row{ grid-template-columns: 30px 1fr; }
     .rownum{ font-size: 11px; }
+    .part-nav-inner{ padding: 10px 16px; gap: 6px; }
+    .part-btn{ font-size: 12px; padding: 7px 11px; }
   }
 </style>
 </head>
@@ -339,6 +388,10 @@
     <span>Actualizado: <b id="dateDisplay"></b></span>
   </div>
 </header>
+
+<nav class="part-nav">
+  <div class="part-nav-inner" id="partNav"></div>
+</nav>
 
 <div class="filters" id="filters"></div>
 
@@ -555,14 +608,28 @@ El gráfico debe quedar vinculado a la tabla dinámica, de modo que si cambia la
 
   const main = document.getElementById('main');
   const filtersEl = document.getElementById('filters');
+  const partNavEl = document.getElementById('partNav');
   const countDisplay = document.getElementById('countDisplay');
   const dateDisplay = document.getElementById('dateDisplay');
 
   dateDisplay.textContent = new Date().toLocaleDateString('es-AR', { day: '2-digit', month: 'long', year: 'numeric' });
   countDisplay.textContent = prompts.length;
 
-  const categories = ["Todos", ...new Set(prompts.map(p => p.category))];
+  // Lista de partes en orden de aparición, para armar el menú superior.
+  const parts = [];
+  prompts.forEach(p => {
+    if (!parts.find(x => x.part === p.part)){
+      parts.push({ part: p.part, partTitle: p.partTitle.replace(/^Parte \d+ · /, '') });
+    }
+  });
+
+  let activePart = "Todos";
   let activeFilter = "Todos";
+
+  function categoriesForActivePart(){
+    const source = activePart === "Todos" ? prompts : prompts.filter(p => p.part === activePart);
+    return ["Todos", ...new Set(source.map(p => p.category))];
+  }
 
   function copyIcon(){
     return `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="12" height="12" rx="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>`;
@@ -571,9 +638,27 @@ El gráfico debe quedar vinculado a la tabla dinámica, de modo que si cambia la
     return `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>`;
   }
 
+  function renderPartNav(){
+    partNavEl.innerHTML = "";
+
+    const allBtn = document.createElement('button');
+    allBtn.className = 'part-btn' + (activePart === "Todos" ? ' active' : '');
+    allBtn.textContent = 'Todas las partes';
+    allBtn.onclick = () => { activePart = "Todos"; activeFilter = "Todos"; renderPartNav(); renderFilters(); renderRows(); };
+    partNavEl.appendChild(allBtn);
+
+    parts.forEach(({ part, partTitle }) => {
+      const btn = document.createElement('button');
+      btn.className = 'part-btn' + (activePart === part ? ' active' : '');
+      btn.innerHTML = `<span class="part-btn-num">${part}</span>${partTitle}`;
+      btn.onclick = () => { activePart = part; activeFilter = "Todos"; renderPartNav(); renderFilters(); renderRows(); };
+      partNavEl.appendChild(btn);
+    });
+  }
+
   function renderFilters(){
     filtersEl.innerHTML = "";
-    categories.forEach(cat => {
+    categoriesForActivePart().forEach(cat => {
       const chip = document.createElement('button');
       chip.className = 'chip' + (cat === activeFilter ? ' active' : '');
       chip.textContent = cat;
@@ -584,7 +669,10 @@ El gráfico debe quedar vinculado a la tabla dinámica, de modo que si cambia la
 
   function renderRows(){
     main.innerHTML = "";
-    const list = prompts.filter(p => activeFilter === "Todos" || p.category === activeFilter);
+    const list = prompts.filter(p =>
+      (activePart === "Todos" || p.part === activePart) &&
+      (activeFilter === "Todos" || p.category === activeFilter)
+    );
 
     let lastPart = null;
     let rowInPart = 0;
@@ -635,6 +723,7 @@ El gráfico debe quedar vinculado a la tabla dinámica, de modo que si cambia la
     });
   }
 
+  renderPartNav();
   renderFilters();
   renderRows();
 </script>
