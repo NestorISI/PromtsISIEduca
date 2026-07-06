@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <!--
   ═══════════════════════════════════════════════════════════════
-  VERSIÓN DEL ARCHIVO: 1.6
+  VERSIÓN DEL ARCHIVO: 1.7
   Última actualización: 2026-07-05
 
   Historial:
@@ -12,6 +12,7 @@
   - 1.4  Paso 3: punto medio con tipo "Porcentaje" (no Fórmula, no Percentil)
   - 1.5  Se agregó Parte 2 / Paso 4: marcar cumpleañeros del mes actual (usa columna Mes)
   - 1.6  Se agregó Parte 2 / Paso 5: barras de datos sobre EdadAños
+  - 1.7  Se agregó Parte 3 / Paso 6 (RangoEdad con SI) y Paso 7 (Departamento ficticio)
 
   Al editar este archivo (a mano o por chat), actualizar este número
   de versión y sumar una línea al historial.
@@ -422,6 +423,33 @@ No agregues columnas nuevas para esto: usá directamente el formato condicional 
 Usá el formato de barras de datos nativo de Excel, con relleno sólido (no degradado), aplicado sobre toda la columna EdadAños de la tabla.
 
 No agregues columnas ni fórmulas adicionales para esto: usá directamente el formato condicional nativo de Excel de barras de datos.`
+    },
+    {
+      part: 3,
+      partTitle: "Parte 3 · Columnas para agrupar",
+      category: "Paso 6 · Columnas para agrupar",
+      title: "Agregar una columna de Rango de Edad",
+      desc: "Crea una columna nueva que clasifica a cada persona en un grupo fijo según su edad: Menor de 30, de 30 a 50, o Mayor de 50. Sirve para poder agrupar y cruzar datos más adelante.",
+      prompt: `A la tabla ya existente, agregale una columna nueva llamada RangoEdad que clasifique a cada persona según el valor de EdadAños, usando estas categorías fijas:
+- "Menor de 30": si EdadAños es menor a 30
+- "30 a 50": si EdadAños está entre 30 y 50 (inclusive)
+- "Mayor de 50": si EdadAños es mayor a 50
+
+Usá una fórmula con SI (anidados si hace falta) basada en la columna EdadAños ya existente, no valores pegados a mano. No calcules estos rangos con funciones estadísticas ni con criterios que dependan del conjunto de datos: los tres límites (30 y 50) son fijos, siempre los mismos sin importar los datos de la tabla.
+
+Al final, revisá que ninguna celda tenga errores (#VALOR!, #NUM!, etc.) y corregilos si aparecen.`
+    },
+    {
+      part: 3,
+      partTitle: "Parte 3 · Columnas para agrupar",
+      category: "Paso 7 · Columnas para agrupar",
+      title: "Agregar una columna de Departamento",
+      desc: "Crea una columna nueva con un área de trabajo ficticia para cada persona (Ventas, Administración, Sistemas o RRHH), para tener una segunda categoría con la que armar tablas dinámicas cruzadas más adelante.",
+      prompt: `A la tabla ya existente, agregale una columna nueva llamada Departamento que le asigne a cada persona, de forma ficticia, uno de estos cuatro valores: Ventas, Administración, Sistemas o RRHH.
+
+La asignación no tiene que seguir ninguna lógica basada en las otras columnas (edad, sueldo, fecha, etc.): simplemente repartí los 100 registros entre los cuatro departamentos de manera variada, para que después se puedan cruzar en una tabla dinámica.
+
+Estos valores pueden quedar como texto fijo en la columna (no hace falta que sea una fórmula viva). Al final, revisá que ninguna celda tenga errores (#VALOR!, #NUM!, etc.) y corregilos si aparecen.`
     }
   ];
 
