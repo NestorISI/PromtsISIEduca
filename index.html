@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <!--
   ═══════════════════════════════════════════════════════════════
-  VERSIÓN DEL ARCHIVO: 1.7
+  VERSIÓN DEL ARCHIVO: 1.9
   Última actualización: 2026-07-05
 
   Historial:
@@ -13,6 +13,8 @@
   - 1.5  Se agregó Parte 2 / Paso 4: marcar cumpleañeros del mes actual (usa columna Mes)
   - 1.6  Se agregó Parte 2 / Paso 5: barras de datos sobre EdadAños
   - 1.7  Se agregó Parte 3 / Paso 6 (RangoEdad con SI) y Paso 7 (Departamento ficticio)
+  - 1.8  Se agregó Parte 4 / Paso 8: gráfico de barras de personas por Departamento
+  - 1.9  Se agregó Parte 4 / Paso 9: gráfico de barras de cumpleañeros por mes
 
   Al editar este archivo (a mano o por chat), actualizar este número
   de versión y sumar una línea al historial.
@@ -450,6 +452,34 @@ Al final, revisá que ninguna celda tenga errores (#VALOR!, #NUM!, etc.) y corre
 La asignación no tiene que seguir ninguna lógica basada en las otras columnas (edad, sueldo, fecha, etc.): simplemente repartí los 100 registros entre los cuatro departamentos de manera variada, para que después se puedan cruzar en una tabla dinámica.
 
 Estos valores pueden quedar como texto fijo en la columna (no hace falta que sea una fórmula viva). Al final, revisá que ninguna celda tenga errores (#VALOR!, #NUM!, etc.) y corregilos si aparecen.`
+    },
+    {
+      part: 4,
+      partTitle: "Parte 4 · Gráfico simple",
+      category: "Paso 8 · Gráfico simple",
+      title: "Gráfico de personas por Departamento",
+      desc: "Arma un gráfico de barras que muestra cuántas personas hay en cada Departamento, usando una pequeña tabla de apoyo con la cantidad de cada uno. Todavía sin tabla dinámica.",
+      prompt: `A partir de la tabla ya existente, quiero un gráfico de barras que muestre la cantidad de personas por Departamento.
+
+Primero, armá una tabla de apoyo pequeña en una zona vacía de la hoja, con una fila por cada Departamento (Ventas, Administración, Sistemas, RRHH) y, al lado de cada uno, la cantidad de personas de la tabla principal que pertenecen a ese Departamento, calculada con una fórmula viva (por ejemplo CONTAR.SI) sobre la columna Departamento.
+
+Con esa tabla de apoyo, insertá un gráfico de barras verticales donde el eje horizontal muestre el nombre del Departamento y el eje vertical la cantidad de personas. Poné como título del gráfico "Personas por Departamento".
+
+No uses tabla dinámica para este gráfico: armalo directo a partir de la tabla de apoyo con fórmulas. Al final, revisá que ninguna celda tenga errores (#VALOR!, #NUM!, etc.) y corregilos si aparecen.`
+    },
+    {
+      part: 4,
+      partTitle: "Parte 4 · Gráfico simple",
+      category: "Paso 9 · Gráfico simple",
+      title: "Gráfico de cumpleañeros por mes",
+      desc: "Arma un gráfico de barras que muestra cuántas personas cumplen años en cada mes del año, usando una pequeña tabla de apoyo con la cantidad por mes. Todavía sin tabla dinámica.",
+      prompt: `A partir de la tabla ya existente, quiero un gráfico de barras que muestre la cantidad de personas que cumplen años en cada mes del año.
+
+Primero, armá una tabla de apoyo pequeña en una zona vacía de la hoja, con una fila por cada uno de los 12 meses (en orden, de enero a diciembre, usando el nombre del mes en español) y, al lado de cada uno, la cantidad de personas de la tabla principal cuyo Mes corresponda a ese mes, calculada con una fórmula viva (por ejemplo CONTAR.SI) sobre la columna Mes.
+
+Con esa tabla de apoyo, insertá un gráfico de barras verticales donde el eje horizontal muestre el nombre del mes y el eje vertical la cantidad de personas. Poné como título del gráfico "Cumpleañeros por mes".
+
+No uses tabla dinámica para este gráfico: armalo directo a partir de la tabla de apoyo con fórmulas. Al final, revisá que ninguna celda tenga errores (#VALOR!, #NUM!, etc.) y corregilos si aparecen.`
     }
   ];
 
