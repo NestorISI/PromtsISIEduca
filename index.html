@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <!--
   ═══════════════════════════════════════════════════════════════
-  VERSIÓN DEL ARCHIVO: 1.9
+  VERSIÓN DEL ARCHIVO: 1.10
   Última actualización: 2026-07-05
 
   Historial:
@@ -15,6 +15,7 @@
   - 1.7  Se agregó Parte 3 / Paso 6 (RangoEdad con SI) y Paso 7 (Departamento ficticio)
   - 1.8  Se agregó Parte 4 / Paso 8: gráfico de barras de personas por Departamento
   - 1.9  Se agregó Parte 4 / Paso 9: gráfico de barras de cumpleañeros por mes
+  - 1.10 Se agregó Parte 5 / Paso 10: tabla dinámica simple de personas por rango de edad
 
   Al editar este archivo (a mano o por chat), actualizar este número
   de versión y sumar una línea al historial.
@@ -480,6 +481,22 @@ Primero, armá una tabla de apoyo pequeña en una zona vacía de la hoja, con un
 Con esa tabla de apoyo, insertá un gráfico de barras verticales donde el eje horizontal muestre el nombre del mes y el eje vertical la cantidad de personas. Poné como título del gráfico "Cumpleañeros por mes".
 
 No uses tabla dinámica para este gráfico: armalo directo a partir de la tabla de apoyo con fórmulas. Al final, revisá que ninguna celda tenga errores (#VALOR!, #NUM!, etc.) y corregilos si aparecen.`
+    },
+    {
+      part: 5,
+      partTitle: "Parte 5 · Tablas dinámicas",
+      category: "Paso 10 · Tablas dinámicas",
+      title: "Tabla dinámica: personas por rango de edad",
+      desc: "Arma una tabla dinámica que cuenta cuántas personas hay en cada Rango de Edad, usando la tabla principal como fuente de datos.",
+      prompt: `A partir de la tabla ya existente, insertá una tabla dinámica en una hoja nueva.
+
+Configurala así:
+- Filas: RangoEdad
+- Valores: cantidad de personas (contar registros), usando cualquier columna de la tabla como base para el conteo
+
+El resultado debe mostrar, para cada categoría de RangoEdad ("Menor de 30", "30 a 50", "Mayor de 50"), la cantidad de personas que caen en esa categoría.
+
+Ubicá la tabla dinámica en una hoja nueva del libro, no dentro de la hoja de datos. Al final, revisá que no haya errores y que los tres rangos aparezcan en la tabla dinámica.`
     }
   ];
 
