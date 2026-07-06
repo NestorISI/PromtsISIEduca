@@ -481,7 +481,7 @@ Asegurate de que la columna FechaDeNacimiento quede como fecha real de Excel, no
 - NombreDía, NombreMes (en español, texto completo)
 - InicioDeMes, FinDeMes
 - SemanaAño: usar la función NUM.DE.SEMANA con tipo 2, de modo que la semana comience el día lunes y la semana 1 sea siempre la que contiene el 1 de enero (no usar el criterio ISO)
-- EdadAños (edad exacta a la fecha de hoy, considerando si ya pasó el cumpleaños)
+- EdadAños: usar la función SIFECHA (con el parámetro "y") para calcular la edad exacta en años completos a la fecha de hoy, considerando si ya pasó el cumpleaños
 - DíasVividos (desde la fecha de nacimiento hasta hoy)
 
 Si FechaDeNacimiento no está en formato de fecha real, convertila antes de calcular las columnas. Al final, revisá que ninguna celda tenga errores (#VALOR!, #NUM!, etc.) y corregilos si aparecen.`,
@@ -491,7 +491,7 @@ Si FechaDeNacimiento no está en formato de fecha real, convertila antes de calc
 - NombreDía, NombreMes (en español, texto completo)
 - InicioDeMes, FinDeMes
 - SemanaAño: usar la función NUM.DE.SEMANA con tipo 2, de modo que la semana comience el día lunes y la semana 1 sea siempre la que contiene el 1 de enero</mark> <mark class="hl hl-limite">(no usar el criterio ISO)</mark>
-<mark class="hl hl-instruccion">- EdadAños (edad exacta a la fecha de hoy, considerando si ya pasó el cumpleaños)
+<mark class="hl hl-instruccion">- EdadAños: usar la función SIFECHA (con el parámetro "y") para calcular la edad exacta en años completos a la fecha de hoy, considerando si ya pasó el cumpleaños
 - DíasVividos (desde la fecha de nacimiento hasta hoy)</mark>
 
 <mark class="hl hl-limite">Si FechaDeNacimiento no está en formato de fecha real, convertila antes de calcular las columnas.</mark> <mark class="hl hl-verificacion">Al final, revisá que ninguna celda tenga errores (#VALOR!, #NUM!, etc.) y corregilos si aparecen.</mark>`
