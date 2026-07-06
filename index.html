@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <!--
   ═══════════════════════════════════════════════════════════════
-  VERSIÓN DEL ARCHIVO: 1.11
+  VERSIÓN DEL ARCHIVO: 1.12
   Última actualización: 2026-07-05
 
   Historial:
@@ -17,6 +17,7 @@
   - 1.9  Se agregó Parte 4 / Paso 9: gráfico de barras de cumpleañeros por mes
   - 1.10 Se agregó Parte 5 / Paso 10: tabla dinámica simple de personas por rango de edad
   - 1.11 Se agregó Parte 5 / Paso 11: tabla dinámica simple de suma de sueldos por Departamento
+  - 1.12 Se agregó Parte 5 / Paso 12: tabla dinámica cruzada de personas por Departamento y rango de edad
 
   Al editar este archivo (a mano o por chat), actualizar este número
   de versión y sumar una línea al historial.
@@ -514,6 +515,23 @@ Configurala así:
 El resultado debe mostrar, para cada Departamento (Ventas, Administración, Sistemas, RRHH), la suma total de los sueldos de las personas que pertenecen a ese Departamento. Formateá los valores de la tabla dinámica como moneda.
 
 Ubicá la tabla dinámica en una hoja nueva del libro, no dentro de la hoja de datos. Al final, revisá que no haya errores y que los cuatro departamentos aparezcan en la tabla dinámica.`
+    },
+    {
+      part: 5,
+      partTitle: "Parte 5 · Tablas dinámicas",
+      category: "Paso 12 · Tablas dinámicas",
+      title: "Tabla dinámica cruzada: Departamento y Rango de Edad",
+      desc: "Arma una sola tabla dinámica que cruza Departamento y Rango de Edad, mostrando la cantidad de personas en cada combinación de ambos.",
+      prompt: `A partir de la tabla ya existente, insertá una tabla dinámica en una hoja nueva.
+
+Configurala así:
+- Filas: Departamento
+- Columnas: RangoEdad
+- Valores: cantidad de personas (contar registros), usando cualquier columna de la tabla como base para el conteo
+
+El resultado debe ser una sola tabla que cruce los cuatro departamentos (Ventas, Administración, Sistemas, RRHH) con las tres categorías de RangoEdad ("Menor de 30", "30 a 50", "Mayor de 50"), mostrando en cada celda la cantidad de personas que corresponden a esa combinación.
+
+Ubicá la tabla dinámica en una hoja nueva del libro, no dentro de la hoja de datos. Al final, revisá que no haya errores y que todas las combinaciones de Departamento y RangoEdad aparezcan en la tabla, aunque el valor sea cero.`
     }
   ];
 
