@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <!--
   ═══════════════════════════════════════════════════════════════
-  VERSIÓN DEL ARCHIVO: 1.10
+  VERSIÓN DEL ARCHIVO: 1.11
   Última actualización: 2026-07-05
 
   Historial:
@@ -16,6 +16,7 @@
   - 1.8  Se agregó Parte 4 / Paso 8: gráfico de barras de personas por Departamento
   - 1.9  Se agregó Parte 4 / Paso 9: gráfico de barras de cumpleañeros por mes
   - 1.10 Se agregó Parte 5 / Paso 10: tabla dinámica simple de personas por rango de edad
+  - 1.11 Se agregó Parte 5 / Paso 11: tabla dinámica simple de suma de sueldos por Departamento
 
   Al editar este archivo (a mano o por chat), actualizar este número
   de versión y sumar una línea al historial.
@@ -497,6 +498,22 @@ Configurala así:
 El resultado debe mostrar, para cada categoría de RangoEdad ("Menor de 30", "30 a 50", "Mayor de 50"), la cantidad de personas que caen en esa categoría.
 
 Ubicá la tabla dinámica en una hoja nueva del libro, no dentro de la hoja de datos. Al final, revisá que no haya errores y que los tres rangos aparezcan en la tabla dinámica.`
+    },
+    {
+      part: 5,
+      partTitle: "Parte 5 · Tablas dinámicas",
+      category: "Paso 11 · Tablas dinámicas",
+      title: "Tabla dinámica: suma de sueldos por Departamento",
+      desc: "Arma una tabla dinámica que suma el SueldoMensual de todas las personas de cada Departamento, usando la tabla principal como fuente de datos.",
+      prompt: `A partir de la tabla ya existente, insertá una tabla dinámica en una hoja nueva.
+
+Configurala así:
+- Filas: Departamento
+- Valores: suma de SueldoMensual
+
+El resultado debe mostrar, para cada Departamento (Ventas, Administración, Sistemas, RRHH), la suma total de los sueldos de las personas que pertenecen a ese Departamento. Formateá los valores de la tabla dinámica como moneda.
+
+Ubicá la tabla dinámica en una hoja nueva del libro, no dentro de la hoja de datos. Al final, revisá que no haya errores y que los cuatro departamentos aparezcan en la tabla dinámica.`
     }
   ];
 
