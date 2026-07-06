@@ -29,6 +29,8 @@
     --teal-dark: #14504A;
     --amber: #DB8A3A;
     --amber-dark: #B96F26;
+    --verif: #6E56CF;
+    --verif-dark: #56409E;
     --radius: 6px;
   }
 
@@ -314,6 +316,52 @@
     word-break: break-word;
   }
 
+  /* ── Las 3 partes de un buen prompt ─────────────────────── */
+  mark.hl{
+    padding: 0 3px;
+    border-radius: 3px;
+    font-weight: 500;
+  }
+  mark.hl-instruccion{
+    background: rgba(31,111,99,0.13);
+    color: var(--teal-dark);
+    box-shadow: inset 0 -1px 0 rgba(31,111,99,0.35);
+  }
+  mark.hl-limite{
+    background: rgba(219,138,58,0.18);
+    color: var(--amber-dark);
+    box-shadow: inset 0 -1px 0 rgba(185,111,38,0.4);
+  }
+  mark.hl-verificacion{
+    background: rgba(110,86,207,0.14);
+    color: var(--verif-dark);
+    box-shadow: inset 0 -1px 0 rgba(110,86,207,0.4);
+  }
+
+  .legend{
+    display:flex;
+    gap: 18px;
+    flex-wrap: wrap;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    color: var(--ink-soft);
+    margin-top: 14px;
+  }
+  .legend-item{
+    display:flex;
+    align-items:center;
+    gap: 7px;
+  }
+  .legend-dot{
+    width: 11px;
+    height: 11px;
+    border-radius: 3px;
+    flex: 0 0 auto;
+  }
+  .dot-instruccion{ background: rgba(31,111,99,0.35); box-shadow: inset 0 0 0 1px var(--teal-dark); }
+  .dot-limite{ background: rgba(219,138,58,0.4); box-shadow: inset 0 0 0 1px var(--amber-dark); }
+  .dot-verificacion{ background: rgba(110,86,207,0.4); box-shadow: inset 0 0 0 1px var(--verif-dark); }
+
   .copy-btn{
     margin-top: 12px;
     display: inline-flex;
@@ -370,6 +418,11 @@
     <span><b id="countDisplay">0</b> prompts</span>
     <span>Actualizado: <b id="dateDisplay"></b></span>
   </div>
+  <div class="legend">
+    <span class="legend-item"><span class="legend-dot dot-instruccion"></span><b>Instrucción</b>&nbsp;— qué tiene que hacer</span>
+    <span class="legend-item"><span class="legend-dot dot-limite"></span><b>Límite</b>&nbsp;— qué NO tiene que hacer</span>
+    <span class="legend-item"><span class="legend-dot dot-verificacion"></span><b>Verificación</b>&nbsp;— cómo confirmar que salió bien</span>
+  </div>
 </header>
 
 <nav class="part-nav">
@@ -411,7 +464,10 @@
       desc: "Crea los datos constantes: nombre, apellido, fecha de nacimiento y sueldo, ya formateados como tabla de Excel. Este es el punto de partida antes de agregar cualquier fórmula.",
       prompt: `Creá una tabla en Excel con 100 registros ficticios con los campos: Nombre, Apellido, FechaDeNacimiento (formato dd/mm/aaaa, entre 1960 y 2005) y SueldoMensual (entre 300.000 y 3.000.000, formato moneda).
 
-Asegurate de que la columna FechaDeNacimiento quede como fecha real de Excel, no como texto. Aplicá formato de tabla de Excel con encabezados y filtros. Al final, revisá que ninguna celda tenga errores (#VALOR!, #NUM!, etc.) y corregilos si aparecen.`
+Asegurate de que la columna FechaDeNacimiento quede como fecha real de Excel, no como texto. Aplicá formato de tabla de Excel con encabezados y filtros. Al final, revisá que ninguna celda tenga errores (#VALOR!, #NUM!, etc.) y corregilos si aparecen.`,
+      promptHtml: `<mark class="hl hl-instruccion">Creá una tabla en Excel con 100 registros ficticios con los campos: Nombre, Apellido, FechaDeNacimiento (formato dd/mm/aaaa, entre 1960 y 2005) y SueldoMensual (entre 300.000 y 3.000.000, formato moneda).</mark>
+
+<mark class="hl hl-limite">Asegurate de que la columna FechaDeNacimiento quede como fecha real de Excel, no como texto.</mark> <mark class="hl hl-instruccion">Aplicá formato de tabla de Excel con encabezados y filtros.</mark> <mark class="hl hl-verificacion">Al final, revisá que ninguna celda tenga errores (#VALOR!, #NUM!, etc.) y corregilos si aparecen.</mark>`
     },
     {
       part: 1,
@@ -428,7 +484,17 @@ Asegurate de que la columna FechaDeNacimiento quede como fecha real de Excel, no
 - EdadAños (edad exacta a la fecha de hoy, considerando si ya pasó el cumpleaños)
 - DíasVividos (desde la fecha de nacimiento hasta hoy)
 
-Si FechaDeNacimiento no está en formato de fecha real, convertila antes de calcular las columnas. Al final, revisá que ninguna celda tenga errores (#VALOR!, #NUM!, etc.) y corregilos si aparecen.`
+Si FechaDeNacimiento no está en formato de fecha real, convertila antes de calcular las columnas. Al final, revisá que ninguna celda tenga errores (#VALOR!, #NUM!, etc.) y corregilos si aparecen.`,
+      promptHtml: `<mark class="hl hl-instruccion">A la tabla ya existente, que tiene la columna FechaDeNacimiento en formato de fecha real, agregale las siguientes columnas calculadas, todas con fórmulas vivas de Excel</mark> <mark class="hl hl-limite">(no valores pegados)</mark><mark class="hl hl-instruccion">, basadas en FechaDeNacimiento:
+- Día, Mes, Año
+- DíaSemanaNum (1=lunes)
+- NombreDía, NombreMes (en español, texto completo)
+- InicioDeMes, FinDeMes
+- SemanaAño: usar la función NUM.DE.SEMANA con tipo 2, de modo que la semana comience el día lunes y la semana 1 sea siempre la que contiene el 1 de enero</mark> <mark class="hl hl-limite">(no usar el criterio ISO)</mark>
+<mark class="hl hl-instruccion">- EdadAños (edad exacta a la fecha de hoy, considerando si ya pasó el cumpleaños)
+- DíasVividos (desde la fecha de nacimiento hasta hoy)</mark>
+
+<mark class="hl hl-limite">Si FechaDeNacimiento no está en formato de fecha real, convertila antes de calcular las columnas.</mark> <mark class="hl hl-verificacion">Al final, revisá que ninguna celda tenga errores (#VALOR!, #NUM!, etc.) y corregilos si aparecen.</mark>`
     },
     {
       part: 2,
@@ -440,7 +506,12 @@ Si FechaDeNacimiento no está en formato de fecha real, convertila antes de calc
 
 Para el punto medio de la escala de colores, configuralo con el tipo "Porcentaje" (por ejemplo 50%).
 
-No agregues columnas ni fórmulas adicionales para esto: usá directamente el formato condicional nativo de Excel de escala de colores, aplicado sobre toda la columna SueldoMensual de la tabla.`
+No agregues columnas ni fórmulas adicionales para esto: usá directamente el formato condicional nativo de Excel de escala de colores, aplicado sobre toda la columna SueldoMensual de la tabla.`,
+      promptHtml: `<mark class="hl hl-instruccion">A la tabla ya existente, aplicale un formato condicional de tipo escala de colores sobre la columna SueldoMensual: los valores más altos deben verse en verde y los valores más bajos en rojo, con una transición gradual de color entre ambos extremos.</mark>
+
+<mark class="hl hl-instruccion">Para el punto medio de la escala de colores, configuralo con el tipo "Porcentaje" (por ejemplo 50%).</mark>
+
+<mark class="hl hl-limite">No agregues columnas ni fórmulas adicionales para esto: usá directamente el formato condicional nativo de Excel de escala de colores, aplicado sobre toda la columna SueldoMensual de la tabla.</mark>`
     },
     {
       part: 2,
@@ -452,7 +523,12 @@ No agregues columnas ni fórmulas adicionales para esto: usá directamente el fo
 
 Usá una regla con fórmula que compare la columna Mes de cada fila con el número de mes de la fecha de hoy, y aplicala a todas las columnas de la tabla para que se pinte la fila completa, no solo la celda de Mes.
 
-No agregues columnas nuevas para esto: usá directamente el formato condicional nativo de Excel con una regla basada en fórmula, aplicada sobre toda la tabla.`
+No agregues columnas nuevas para esto: usá directamente el formato condicional nativo de Excel con una regla basada en fórmula, aplicada sobre toda la tabla.`,
+      promptHtml: `<mark class="hl hl-instruccion">A la tabla ya existente, agregale un formato condicional que resalte con un color de fondo toda la fila de las personas cuyo Mes coincida con el mes actual (el mes de hoy).</mark>
+
+<mark class="hl hl-instruccion">Usá una regla con fórmula que compare la columna Mes de cada fila con el número de mes de la fecha de hoy, y aplicala a todas las columnas de la tabla para que se pinte la fila completa, no solo la celda de Mes.</mark>
+
+<mark class="hl hl-limite">No agregues columnas nuevas para esto: usá directamente el formato condicional nativo de Excel con una regla basada en fórmula, aplicada sobre toda la tabla.</mark>`
     },
     {
       part: 2,
@@ -464,7 +540,12 @@ No agregues columnas nuevas para esto: usá directamente el formato condicional 
 
 Usá el formato de barras de datos nativo de Excel, con relleno sólido (no degradado), aplicado sobre toda la columna EdadAños de la tabla.
 
-No agregues columnas ni fórmulas adicionales para esto: usá directamente el formato condicional nativo de Excel de barras de datos.`
+No agregues columnas ni fórmulas adicionales para esto: usá directamente el formato condicional nativo de Excel de barras de datos.`,
+      promptHtml: `<mark class="hl hl-instruccion">A la tabla ya existente, aplicale un formato condicional de tipo barras de datos sobre la columna EdadAños: cuanto mayor sea la edad, más larga debe verse la barra dentro de la celda.</mark>
+
+<mark class="hl hl-instruccion">Usá el formato de barras de datos nativo de Excel, con relleno sólido</mark> <mark class="hl hl-limite">(no degradado)</mark><mark class="hl hl-instruccion">, aplicado sobre toda la columna EdadAños de la tabla.</mark>
+
+<mark class="hl hl-limite">No agregues columnas ni fórmulas adicionales para esto: usá directamente el formato condicional nativo de Excel de barras de datos.</mark>`
     },
     {
       part: 3,
@@ -479,7 +560,15 @@ No agregues columnas ni fórmulas adicionales para esto: usá directamente el fo
 
 Usá una fórmula con SI (anidados si hace falta) basada en la columna EdadAños ya existente, no valores pegados a mano. No calcules estos rangos con funciones estadísticas ni con criterios que dependan del conjunto de datos: los tres límites (30 y 50) son fijos, siempre los mismos sin importar los datos de la tabla.
 
-Al final, revisá que ninguna celda tenga errores (#VALOR!, #NUM!, etc.) y corregilos si aparecen.`
+Al final, revisá que ninguna celda tenga errores (#VALOR!, #NUM!, etc.) y corregilos si aparecen.`,
+      promptHtml: `<mark class="hl hl-instruccion">A la tabla ya existente, agregale una columna nueva llamada RangoEdad que clasifique a cada persona según el valor de EdadAños, usando estas categorías fijas:
+- "Menor de 30": si EdadAños es menor a 30
+- "30 a 50": si EdadAños está entre 30 y 50 (inclusive)
+- "Mayor de 50": si EdadAños es mayor a 50</mark>
+
+<mark class="hl hl-instruccion">Usá una fórmula con SI (anidados si hace falta) basada en la columna EdadAños ya existente,</mark> <mark class="hl hl-limite">no valores pegados a mano. No calcules estos rangos con funciones estadísticas ni con criterios que dependan del conjunto de datos: los tres límites (30 y 50) son fijos, siempre los mismos sin importar los datos de la tabla.</mark>
+
+<mark class="hl hl-verificacion">Al final, revisá que ninguna celda tenga errores (#VALOR!, #NUM!, etc.) y corregilos si aparecen.</mark>`
     },
     {
       part: 3,
@@ -491,7 +580,12 @@ Al final, revisá que ninguna celda tenga errores (#VALOR!, #NUM!, etc.) y corre
 
 La asignación no tiene que seguir ninguna lógica basada en las otras columnas (edad, sueldo, fecha, etc.): simplemente repartí los 100 registros entre los cuatro departamentos de manera variada, para que después se puedan cruzar en una tabla dinámica.
 
-Estos valores pueden quedar como texto fijo en la columna (no hace falta que sea una fórmula viva). Al final, revisá que ninguna celda tenga errores (#VALOR!, #NUM!, etc.) y corregilos si aparecen.`
+Estos valores pueden quedar como texto fijo en la columna (no hace falta que sea una fórmula viva). Al final, revisá que ninguna celda tenga errores (#VALOR!, #NUM!, etc.) y corregilos si aparecen.`,
+      promptHtml: `<mark class="hl hl-instruccion">A la tabla ya existente, agregale una columna nueva llamada Departamento que le asigne a cada persona, de forma ficticia, uno de estos cuatro valores: Ventas, Administración, Sistemas o RRHH.</mark>
+
+<mark class="hl hl-limite">La asignación no tiene que seguir ninguna lógica basada en las otras columnas (edad, sueldo, fecha, etc.): simplemente repartí los 100 registros entre los cuatro departamentos de manera variada, para que después se puedan cruzar en una tabla dinámica.</mark>
+
+<mark class="hl hl-limite">Estos valores pueden quedar como texto fijo en la columna (no hace falta que sea una fórmula viva).</mark> <mark class="hl hl-verificacion">Al final, revisá que ninguna celda tenga errores (#VALOR!, #NUM!, etc.) y corregilos si aparecen.</mark>`
     },
     {
       part: 4,
@@ -505,7 +599,14 @@ Primero, armá una tabla de apoyo pequeña en una zona vacía de la hoja, con un
 
 Con esa tabla de apoyo, insertá un gráfico de barras verticales donde el eje horizontal muestre el nombre del Departamento y el eje vertical la cantidad de personas. Poné como título del gráfico "Personas por Departamento".
 
-No uses tabla dinámica para este gráfico: armalo directo a partir de la tabla de apoyo con fórmulas. Al final, revisá que ninguna celda tenga errores (#VALOR!, #NUM!, etc.) y corregilos si aparecen.`
+No uses tabla dinámica para este gráfico: armalo directo a partir de la tabla de apoyo con fórmulas. Al final, revisá que ninguna celda tenga errores (#VALOR!, #NUM!, etc.) y corregilos si aparecen.`,
+      promptHtml: `<mark class="hl hl-instruccion">A partir de la tabla ya existente, quiero un gráfico de barras que muestre la cantidad de personas por Departamento.</mark>
+
+<mark class="hl hl-instruccion">Primero, armá una tabla de apoyo pequeña en una zona vacía de la hoja, con una fila por cada Departamento (Ventas, Administración, Sistemas, RRHH) y, al lado de cada uno, la cantidad de personas de la tabla principal que pertenecen a ese Departamento, calculada con una fórmula viva (por ejemplo CONTAR.SI) sobre la columna Departamento.</mark>
+
+<mark class="hl hl-instruccion">Con esa tabla de apoyo, insertá un gráfico de barras verticales donde el eje horizontal muestre el nombre del Departamento y el eje vertical la cantidad de personas. Poné como título del gráfico "Personas por Departamento".</mark>
+
+<mark class="hl hl-limite">No uses tabla dinámica para este gráfico: armalo directo a partir de la tabla de apoyo con fórmulas.</mark> <mark class="hl hl-verificacion">Al final, revisá que ninguna celda tenga errores (#VALOR!, #NUM!, etc.) y corregilos si aparecen.</mark>`
     },
     {
       part: 4,
@@ -519,7 +620,14 @@ Primero, armá una tabla de apoyo pequeña en una zona vacía de la hoja, con un
 
 Con esa tabla de apoyo, insertá un gráfico de barras verticales donde el eje horizontal muestre el nombre del mes y el eje vertical la cantidad de personas. Poné como título del gráfico "Cumpleañeros por mes".
 
-No uses tabla dinámica para este gráfico: armalo directo a partir de la tabla de apoyo con fórmulas. Al final, revisá que ninguna celda tenga errores (#VALOR!, #NUM!, etc.) y corregilos si aparecen.`
+No uses tabla dinámica para este gráfico: armalo directo a partir de la tabla de apoyo con fórmulas. Al final, revisá que ninguna celda tenga errores (#VALOR!, #NUM!, etc.) y corregilos si aparecen.`,
+      promptHtml: `<mark class="hl hl-instruccion">A partir de la tabla ya existente, quiero un gráfico de barras que muestre la cantidad de personas que cumplen años en cada mes del año.</mark>
+
+<mark class="hl hl-instruccion">Primero, armá una tabla de apoyo pequeña en una zona vacía de la hoja, con una fila por cada uno de los 12 meses (en orden, de enero a diciembre, usando el nombre del mes en español) y, al lado de cada uno, la cantidad de personas de la tabla principal cuyo Mes corresponda a ese mes, calculada con una fórmula viva (por ejemplo CONTAR.SI) sobre la columna Mes.</mark>
+
+<mark class="hl hl-instruccion">Con esa tabla de apoyo, insertá un gráfico de barras verticales donde el eje horizontal muestre el nombre del mes y el eje vertical la cantidad de personas. Poné como título del gráfico "Cumpleañeros por mes".</mark>
+
+<mark class="hl hl-limite">No uses tabla dinámica para este gráfico: armalo directo a partir de la tabla de apoyo con fórmulas.</mark> <mark class="hl hl-verificacion">Al final, revisá que ninguna celda tenga errores (#VALOR!, #NUM!, etc.) y corregilos si aparecen.</mark>`
     },
     {
       part: 5,
@@ -535,7 +643,16 @@ Configurala así:
 
 El resultado debe mostrar, para cada categoría de RangoEdad ("Menor de 30", "30 a 50", "Mayor de 50"), la cantidad de personas que caen en esa categoría.
 
-Ubicá la tabla dinámica en una hoja nueva del libro, no dentro de la hoja de datos. Al final, revisá que no haya errores y que los tres rangos aparezcan en la tabla dinámica.`
+Ubicá la tabla dinámica en una hoja nueva del libro, no dentro de la hoja de datos. Al final, revisá que no haya errores y que los tres rangos aparezcan en la tabla dinámica.`,
+      promptHtml: `<mark class="hl hl-instruccion">A partir de la tabla ya existente, insertá una tabla dinámica en una hoja nueva.
+
+Configurala así:
+- Filas: RangoEdad
+- Valores: cantidad de personas (contar registros), usando cualquier columna de la tabla como base para el conteo</mark>
+
+<mark class="hl hl-verificacion">El resultado debe mostrar, para cada categoría de RangoEdad ("Menor de 30", "30 a 50", "Mayor de 50"), la cantidad de personas que caen en esa categoría.</mark>
+
+<mark class="hl hl-limite">Ubicá la tabla dinámica en una hoja nueva del libro, no dentro de la hoja de datos.</mark> <mark class="hl hl-verificacion">Al final, revisá que no haya errores y que los tres rangos aparezcan en la tabla dinámica.</mark>`
     },
     {
       part: 5,
@@ -551,7 +668,16 @@ Configurala así:
 
 El resultado debe mostrar, para cada Departamento (Ventas, Administración, Sistemas, RRHH), la suma total de los sueldos de las personas que pertenecen a ese Departamento. Formateá los valores de la tabla dinámica como moneda.
 
-Ubicá la tabla dinámica en una hoja nueva del libro, no dentro de la hoja de datos. Al final, revisá que no haya errores y que los cuatro departamentos aparezcan en la tabla dinámica.`
+Ubicá la tabla dinámica en una hoja nueva del libro, no dentro de la hoja de datos. Al final, revisá que no haya errores y que los cuatro departamentos aparezcan en la tabla dinámica.`,
+      promptHtml: `<mark class="hl hl-instruccion">A partir de la tabla ya existente, insertá una tabla dinámica en una hoja nueva.
+
+Configurala así:
+- Filas: Departamento
+- Valores: suma de SueldoMensual</mark>
+
+<mark class="hl hl-verificacion">El resultado debe mostrar, para cada Departamento (Ventas, Administración, Sistemas, RRHH), la suma total de los sueldos de las personas que pertenecen a ese Departamento.</mark> <mark class="hl hl-instruccion">Formateá los valores de la tabla dinámica como moneda.</mark>
+
+<mark class="hl hl-limite">Ubicá la tabla dinámica en una hoja nueva del libro, no dentro de la hoja de datos.</mark> <mark class="hl hl-verificacion">Al final, revisá que no haya errores y que los cuatro departamentos aparezcan en la tabla dinámica.</mark>`
     },
     {
       part: 5,
@@ -568,7 +694,17 @@ Configurala así:
 
 El resultado debe ser una sola tabla que cruce los cuatro departamentos (Ventas, Administración, Sistemas, RRHH) con las tres categorías de RangoEdad ("Menor de 30", "30 a 50", "Mayor de 50"), mostrando en cada celda la cantidad de personas que corresponden a esa combinación.
 
-Ubicá la tabla dinámica en una hoja nueva del libro, no dentro de la hoja de datos. Al final, revisá que no haya errores y que todas las combinaciones de Departamento y RangoEdad aparezcan en la tabla, aunque el valor sea cero.`
+Ubicá la tabla dinámica en una hoja nueva del libro, no dentro de la hoja de datos. Al final, revisá que no haya errores y que todas las combinaciones de Departamento y RangoEdad aparezcan en la tabla, aunque el valor sea cero.`,
+      promptHtml: `<mark class="hl hl-instruccion">A partir de la tabla ya existente, insertá una tabla dinámica en una hoja nueva.
+
+Configurala así:
+- Filas: Departamento
+- Columnas: RangoEdad
+- Valores: cantidad de personas (contar registros), usando cualquier columna de la tabla como base para el conteo</mark>
+
+<mark class="hl hl-verificacion">El resultado debe ser una sola tabla que cruce los cuatro departamentos (Ventas, Administración, Sistemas, RRHH) con las tres categorías de RangoEdad ("Menor de 30", "30 a 50", "Mayor de 50"), mostrando en cada celda la cantidad de personas que corresponden a esa combinación.</mark>
+
+<mark class="hl hl-limite">Ubicá la tabla dinámica en una hoja nueva del libro, no dentro de la hoja de datos.</mark> <mark class="hl hl-verificacion">Al final, revisá que no haya errores y que todas las combinaciones de Departamento y RangoEdad aparezcan en la tabla, aunque el valor sea cero.</mark>`
     },
     {
       part: 5,
@@ -585,7 +721,17 @@ Configurá el gráfico como barras verticales agrupadas, donde:
 
 Poné como título del gráfico "Personas por Departamento y Rango de Edad" y agregá una referencia (leyenda) que identifique cada color con su RangoEdad.
 
-El gráfico debe quedar vinculado a la tabla dinámica, de modo que si cambia la tabla dinámica, el gráfico se actualice solo. Ubicalo en la misma hoja nueva donde está la tabla dinámica cruzada. Al final, revisá que no haya errores y que las tres barras de cada Departamento se vean correctamente agrupadas.`
+El gráfico debe quedar vinculado a la tabla dinámica, de modo que si cambia la tabla dinámica, el gráfico se actualice solo. Ubicalo en la misma hoja nueva donde está la tabla dinámica cruzada. Al final, revisá que no haya errores y que las tres barras de cada Departamento se vean correctamente agrupadas.`,
+      promptHtml: `<mark class="hl hl-instruccion">A partir de la tabla dinámica ya existente que cruza Departamento (filas) y RangoEdad (columnas) con la cantidad de personas como valor, insertá un gráfico dinámico basado en esa tabla dinámica.
+
+Configurá el gráfico como barras verticales agrupadas, donde:
+- El eje horizontal muestre los Departamentos (Ventas, Administración, Sistemas, RRHH)
+- Cada Departamento tenga una barra por cada RangoEdad ("Menor de 30", "30 a 50", "Mayor de 50"), agrupadas una al lado de la otra
+- El eje vertical muestre la cantidad de personas
+
+Poné como título del gráfico "Personas por Departamento y Rango de Edad" y agregá una referencia (leyenda) que identifique cada color con su RangoEdad.</mark>
+
+<mark class="hl hl-limite">El gráfico debe quedar vinculado a la tabla dinámica, de modo que si cambia la tabla dinámica, el gráfico se actualice solo. Ubicalo en la misma hoja nueva donde está la tabla dinámica cruzada.</mark> <mark class="hl hl-verificacion">Al final, revisá que no haya errores y que las tres barras de cada Departamento se vean correctamente agrupadas.</mark>`
     }
   ];
 
@@ -683,7 +829,7 @@ El gráfico debe quedar vinculado a la tabla dinámica, de modo que si cambia la
           </div>
           <p class="row-desc">${p.desc}</p>
           <div class="prompt-box">
-            <pre>${p.prompt.replace(/</g,'&lt;')}</pre>
+            <pre>${p.promptHtml}</pre>
           </div>
           <button class="copy-btn">${copyIcon()}<span>Copiar prompt</span></button>
         </div>
