@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <!--
   ═══════════════════════════════════════════════════════════════
-  VERSIÓN DEL ARCHIVO: 1.12
+  VERSIÓN DEL ARCHIVO: 1.13
   Última actualización: 2026-07-05
 
   Historial:
@@ -18,6 +18,7 @@
   - 1.10 Se agregó Parte 5 / Paso 10: tabla dinámica simple de personas por rango de edad
   - 1.11 Se agregó Parte 5 / Paso 11: tabla dinámica simple de suma de sueldos por Departamento
   - 1.12 Se agregó Parte 5 / Paso 12: tabla dinámica cruzada de personas por Departamento y rango de edad
+  - 1.13 Se agregó Parte 5 / Paso 13: gráfico dinámico vinculado a la tabla cruzada del Paso 12
 
   Al editar este archivo (a mano o por chat), actualizar este número
   de versión y sumar una línea al historial.
@@ -532,6 +533,23 @@ Configurala así:
 El resultado debe ser una sola tabla que cruce los cuatro departamentos (Ventas, Administración, Sistemas, RRHH) con las tres categorías de RangoEdad ("Menor de 30", "30 a 50", "Mayor de 50"), mostrando en cada celda la cantidad de personas que corresponden a esa combinación.
 
 Ubicá la tabla dinámica en una hoja nueva del libro, no dentro de la hoja de datos. Al final, revisá que no haya errores y que todas las combinaciones de Departamento y RangoEdad aparezcan en la tabla, aunque el valor sea cero.`
+    },
+    {
+      part: 5,
+      partTitle: "Parte 5 · Tablas dinámicas",
+      category: "Paso 13 · Tablas dinámicas",
+      title: "Gráfico dinámico sobre la tabla cruzada",
+      desc: "Inserta un gráfico conectado a la tabla dinámica cruzada del paso anterior, para ver de un vistazo cómo se reparten los rangos de edad dentro de cada Departamento.",
+      prompt: `A partir de la tabla dinámica ya existente que cruza Departamento (filas) y RangoEdad (columnas) con la cantidad de personas como valor, insertá un gráfico dinámico basado en esa tabla dinámica.
+
+Configurá el gráfico como barras verticales agrupadas, donde:
+- El eje horizontal muestre los Departamentos (Ventas, Administración, Sistemas, RRHH)
+- Cada Departamento tenga una barra por cada RangoEdad ("Menor de 30", "30 a 50", "Mayor de 50"), agrupadas una al lado de la otra
+- El eje vertical muestre la cantidad de personas
+
+Poné como título del gráfico "Personas por Departamento y Rango de Edad" y agregá una referencia (leyenda) que identifique cada color con su RangoEdad.
+
+El gráfico debe quedar vinculado a la tabla dinámica, de modo que si cambia la tabla dinámica, el gráfico se actualice solo. Ubicalo en la misma hoja nueva donde está la tabla dinámica cruzada. Al final, revisá que no haya errores y que las tres barras de cada Departamento se vean correctamente agrupadas.`
     }
   ];
 
